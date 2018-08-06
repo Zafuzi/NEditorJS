@@ -304,8 +304,10 @@ NEditor.Connector.prototype.clearPath = function(){
 //###########################################################################
 // Node Object
 //###########################################################################
-NEditor.Node = function(sTitle){
+NEditor.Node = function(sTitle, type, value){
 	let self = this;
+	this.Type = type;
+	this.Value = value;
 	this.Title = sTitle;
 	this.Inputs = [];
 	this.Outputs = [];
@@ -329,19 +331,22 @@ NEditor.Node = function(sTitle){
 	this.addBtn.classList += "btn";
 	this.addBtn.addEventListener('click', (e) => {
 		e.stopPropagation();
-		console.log("Add a new node dialog");
 		newInputOutputDialog.style.display = "block";
 		newInputOutputDialog.style.top = pageY;
 		newInputOutputDialog.style.left = pageX;
 		currentNode = self;
 	})
-	this.eHeader.appendChild(this.addBtn)
 
 	this.eHeader.addEventListener("mousedown",this.onHeaderDown);
 
 	//.........................
 	this.eList = document.createElement("ul");
 	this.eRoot.appendChild(this.eList);
+	if(this.Type == "normal"){
+		this.eHeader.appendChild(this.addBtn)
+	} else {
+		this.addOutput(value);
+	}
 };
 
 

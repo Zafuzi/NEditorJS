@@ -9,16 +9,15 @@
                 var newNodeDialog = document.getElementById("newNodeDialog");
                 var newInputOutputDialog = document.getElementById("newInputOutputDialog");
 
-                document.getElementById("newNodeCreateBtn").addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    let title = document.getElementById('newNodeTitle').value;
-                    console.log(title);
-                    if(!title) return;
-                    let n = new NEditor.Node(title);
-                    n.setPosition(pageX, pageY);
-                    title.value = "";
-                    newNodeDialog.style.display = "none";
-                })
+                for(let n of document.getElementsByClassName('createNode')){
+                    console.log(n);
+                    n.addEventListener('click', (e) => {
+                        let type = e.currentTarget.dataset.type;
+                        let n = new NEditor.Node(type, type, "#fff");
+                        n.setPosition(pageX, pageY);
+                        newNodeDialog.style.display = "none";
+                    })
+                }
 
                 document.getElementById("newInputOutputCreateBtn").addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -47,18 +46,6 @@
                 newNodeDialog.style.display = "block"
                 newNodeDialog.style.top = e.pageY;
                 newNodeDialog.style.left = e.pageX;
-
-                newNodeDialog.addEventListener('submit', (ev) => {
-                    ev.preventDefault();
-                    let title = document.getElementById('newNodeTitle').value;
-                    console.log(title);
-                    if(!title) return;
-                    let n = new NEditor.Node(title);
-                    n.setPosition(e.pageX, e.pageY);
-                    console.log("create node")
-                    title.value = "";
-                    newNodeDialog.style.display = "none";
-                })
             }
 		</script>
     </head>
@@ -80,10 +67,11 @@
     </header>
     <div class="dialog" id="newNodeDialog">
         <p>New Node</p>
-        <label>Name:  
-            <input id="newNodeTitle" placeholder="Title">
-        </label>
-        <input type="button" value="Create" id="newNodeCreateBtn">
+        <ul>
+            <li class="createNode" data-type="normal">Normal</li>
+            <li class="createNode" data-type="text">Text</li>
+            <li class="createNode" data-type="color">Color</li>
+        </ul>
     </div>
     <div class="dialog" id="newInputOutputDialog">
             <p>New Input/Output</p>
