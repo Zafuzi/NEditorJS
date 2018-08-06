@@ -1,0 +1,115 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="NEditor.css">
+		<script src="NEditor.js"></script>
+		<script>
+            var pageX, pageY, currentNode;
+			window.addEventListener("load",function(e){
+
+                var newNodeDialog = document.getElementById("newNodeDialog");
+                var newInputOutputDialog = document.getElementById("newInputOutputDialog");
+
+                document.getElementById("newNodeCreateBtn").addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    let title = document.getElementById('newNodeTitle').value;
+                    console.log(title);
+                    if(!title) return;
+                    let n = new NEditor.Node(title);
+                    n.setPosition(pageX, pageY);
+                    title.value = "";
+                    newNodeDialog.style.display = "none";
+                })
+
+                document.getElementById("newInputOutputCreateBtn").addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    let title = document.getElementById("newInputOutputTitle").value;
+                    let type = document.getElementById("newInputOutputType").value;
+                    switch(type){
+                        case "Input":
+                            currentNode.addInput(title); break;
+                        case "Output":
+                            currentNode.addOutput(title); break;
+                    }
+                    console.log(type);
+                    newInputOutputDialog.style.display = "none";
+                })
+			});
+            // Add new node with right click
+            window.oncontextmenu = (e) => {
+                e.preventDefault();
+                pageX = e.pageX;
+                pageY = e.pageY;
+
+                newNodeDialog.style.display = "block"
+                newNodeDialog.style.top = e.pageY;
+                newNodeDialog.style.left = e.pageX;
+                newNodeDialog = document.getElementById("newNodeDialog");
+                newNodeDialog.style.display = "block"
+                newNodeDialog.style.top = e.pageY;
+                newNodeDialog.style.left = e.pageX;
+
+                newNodeDialog.addEventListener('submit', (ev) => {
+                    ev.preventDefault();
+                    let title = document.getElementById('newNodeTitle').value;
+                    console.log(title);
+                    if(!title) return;
+                    let n = new NEditor.Node(title);
+                    n.setPosition(e.pageX, e.pageY);
+                    console.log("create node")
+                    title.value = "";
+                    newNodeDialog.style.display = "none";
+                })
+            }
+		</script>
+    </head>
+    <header id="header">
+        <nav>
+            <ul>
+                <li>
+                    <div class="dropdown">
+                        <button class="dropbtn">File</button>
+                        <div class="dropdown-content">
+                            <a href="#">New</a>
+                            <a href="#">Load</a>
+                            <a href="#">Save</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="dialog" id="newNodeDialog">
+        <p>New Node</p>
+        <label>Name:  
+            <input id="newNodeTitle" placeholder="Title">
+        </label>
+        <input type="button" value="Create" id="newNodeCreateBtn">
+    </div>
+    <div class="dialog" id="newInputOutputDialog">
+            <p>New Input/Output</p>
+            <label>Name:  
+                <input id="newInputOutputTitle" placeholder="Title">
+            </label>
+            <label>Type:  
+                <select id="newInputOutputType">
+                    <option>Input</option>
+                    <option>Output</option>
+                </select>
+            </label>
+            <input type="button" value="Create" id="newInputOutputCreateBtn">
+        </div>
+<body>
+
+<svg id="connsvg"></svg>
+
+<p style="color:#a0a0a0; bottom:1px; position:absolute">
+	<i style="color:lime;">Instructions</i><br>
+	- Click on an output connecting dots to start a new connection.<br>
+	- When new connection is made, click on an input connecting dot to complete connection.<br>
+	- Click and hold node title bars to drag them around.
+	<br><br>&copy; 2016 Sketchpunk Labs;
+</p>
+
+
+</body>
+</html>
